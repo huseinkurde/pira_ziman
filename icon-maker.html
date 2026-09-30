@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>صانع أيقونة Pira Ziman</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        canvas {
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            max-width: 100%;
+        }
+        .btn {
+            background-color: #278E43;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn:active { transform: scale(0.95); }
+    </style>
+</head>
+<body>
+
+    <h2>أيقونة Pira Ziman (ألوان العلم الكردي)</h2>
+    <p>انقر على الأزرار لتحميل الأيقونات، ثم ضعها في مجلد المشروع.</p>
+
+    <!-- المعاينة -->
+    <canvas id="iconPreview" width="192" height="192"></canvas>
+
+    <div>
+        <button class="btn" onclick="downloadIcon(192)">تحميل icon-192.png</button>
+        <button class="btn" onclick="downloadIcon(512)">تحميل icon-512.png</button>
+    </div>
+
+    <script>
+        function drawIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            // 1. الخلفية (أخضر كردي)
+            ctx.fillStyle = '#278E43';
+            ctx.fillRect(0, 0, size, size);
+
+            const cx = size / 2;
+            const cy = size / 2.1;
+            const sunRadius = size * 0.22;
+            const rayLength = size * 0.15;
+            const rayBaseWidth = size * 0.05;
+            const numRays = 21; // 21 شعاعاً كما في العلم الكردي
+
+            // 2. رسم الأشعة (باللون الأبيض)
+            ctx.fillStyle = '#ffffff';
+            for (let i = 0; i < numRays; i++) {
+                const angle = (i * Math.PI * 2) / numRays;
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.moveTo(sunRadius * 0.8, -rayBaseWidth/2);
+                ctx.lineTo(sunRadius + rayLength, 0);
+                ctx.lineTo(sunRadius * 0.8, rayBaseWidth/2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            // 3. رسم قرص الشمس في المنتصف (باللون الأصفر)
+            ctx.fillStyle = '#FEBE10';
+            ctx.beginPath();
+            ctx.arc(cx, cy, sunRadius, 0, Math.PI * 2);
+            ctx.shadowColor = 'rgba(0,0,0,0.3)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetY = 2;
+            ctx.fill();
+
+            // 4. اسم التطبيق في الأسفل (باللون الأحمر الكردي)
+            ctx.shadowColor = 'transparent'; 
+            ctx.fillStyle = '#ED2024'; // تم تغيير اللون هنا إلى الأحمر
+            ctx.font = `bold ${size * 0.08}px 'Segoe UI', sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('Pira Ziman', cx, size * 0.88);
+
+            return canvas;
+        }
+
+        window.onload = () => {
+            const previewCanvas = document.getElementById('iconPreview');
+            const generatedCanvas = drawIcon(192);
+            previewCanvas.getContext('2d').drawImage(generatedCanvas, 0, 0);
+        };
+
+        function downloadIcon(size) {
+            const canvas = drawIcon(size);
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

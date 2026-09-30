@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pira Ziman - تطبيق تعلم الكردية</title>
+    <!-- ربط ملف التصميم -->
+    <link rel="stylesheet" href="style.css">
+    <!-- ربط ملف التصميم -->
+    <link rel="stylesheet" href="style.css">
+    <!-- ربط الـ Manifest لتحويله لتطبيق -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#278E43">
+</head>
+<body>
+
+    <!-- الشاشة 1: القائمة الرئيسية -->
+    <div id="home-screen" class="screen active">
+        <div class="header">
+            <!-- زر التبديل للوضع الليلي تم إضافته هنا -->
+            <button id="theme-toggle" class="theme-btn" onclick="toggleTheme()">🌙</button>
+            <h1>Pira Ziman</h1>
+            <p>المكتبة الشاملة لتعلم الكرمانجية</p>
+        </div>
+        <div class="categories-grid" id="categories-grid"></div>
+    </div>
+
+    <!-- الشاشة 2: اختيار النمط -->
+    <div id="mode-screen" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="showScreen('home-screen')">➔ رجوع</button>
+            <div class="title-text" id="selected-cat-title">عنوان الفئة</div>
+            <div style="width:50px"></div>
+        </div>
+        <div class="modes-list">
+            <div class="mode-btn" onclick="startGame('match')">
+                <div class="mode-btn-icon">🔀</div>
+                <div class="mode-btn-text">
+                    <h3>مطابقة الكلمات</h3>
+                    <p>طابق الكلمة مع معناها</p>
+                </div>
+            </div>
+            <div class="mode-btn" onclick="startGame('meaning')">
+                <div class="mode-btn-icon">📝</div>
+                <div class="mode-btn-text">
+                    <h3>اختيار المعنى</h3>
+                    <p>اختر الترجمة الصحيحة</p>
+                </div>
+            </div>
+            <div class="mode-btn" onclick="startGame('picture')">
+                <div class="mode-btn-icon">🖼️</div>
+                <div class="mode-btn-text">
+                    <h3>تخمين الصورة</h3>
+                    <p>اختر الكلمة المطابقة للرمز</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- الشاشة 3: اللعب (المطابقة) -->
+    <div id="match-screen" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="showScreen('mode-screen')">➔ رجوع</button>
+            <div class="title-text">المطابقة</div>
+            <div style="width:50px"></div>
+        </div>
+        <div class="progress-wrapper">
+            <div class="progress-text" id="match-progress-text">التقدم: 0</div>
+            <div class="progress-container"><div class="progress-bar" id="match-progress-bar"></div></div>
+        </div>
+        <div class="match-board">
+            <div class="match-col" id="match-ar-col"></div>
+            <div class="match-col" id="match-ku-col"></div>
+        </div>
+    </div>
+
+    <!-- الشاشة 4: اللعب (الاختبار) -->
+    <div id="quiz-screen" class="screen">
+        <div class="top-bar">
+            <button class="back-btn" onclick="showScreen('mode-screen')">➔ رجوع</button>
+            <div class="title-text" id="quiz-title-text">الاختبار</div>
+            <div style="width:50px"></div>
+        </div>
+        <div class="progress-wrapper">
+            <div class="progress-text" id="quiz-progress-text">التقدم: 0</div>
+            <div class="progress-container"><div class="progress-bar" id="quiz-progress-bar"></div></div>
+        </div>
+        <div class="quiz-board">
+            <div class="question-box" id="quiz-question"></div>
+            <div class="options-grid" id="quiz-options"></div>
+        </div>
+    </div>
+
+    <!-- شاشة الفوز -->
+    <div class="victory-screen" id="victory-screen">
+        <div style="font-size: 5rem; color: var(--kurdish-yellow);">☀️</div>
+        <h1 style="color: var(--kurdish-green);">Pîroz e!</h1>
+        <p style="color: var(--primary); font-weight: bold; font-size: 1.2rem;">أكملت الجولة بنجاح</p>
+        <button class="btn btn-primary" onclick="showScreen('home-screen')">العودة للرئيسية</button>
+    </div>
+
+    <!-- ربط ملفات الجافاسكريبت (الترتيب مهم جداً: البيانات أولاً ثم المنطق) -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+    <!-- ربط ملفات الجافاسكريبت -->
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- تفعيل ميزة العمل بدون إنترنت -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                .then(reg => console.log('Service Worker Registered!', reg))
+                .catch(err => console.error('Service Worker Failed!', err));
+            });
+        }
+    </script>
+</body>
+</html>
+</body>
+</html>
